@@ -1,270 +1,272 @@
-<div align="center">
+# PolkadotGovChain
 
-# Polkadot SDK's Parachain Template
+**A Governance-Enabled Substrate Parachain on Polkadot**
 
-<img height="70px" alt="Polkadot SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Polkadot_Logo_Horizontal_Pink_White.png#gh-dark-mode-only"/>
-<img height="70px" alt="Polkadot SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Polkadot_Logo_Horizontal_Pink_Black.png#gh-light-mode-only"/>
+<p align="center">
+  <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
+  <a href="https://github.com/paritytech/polkadot-sdk"><img src="https://img.shields.io/badge/Substrate-v7.0.1-brightgreen" alt="Substrate"></a>
+  <a href="https://github.com/paritytech/polkadot-sdk"><img src="https://img.shields.io/badge/Polkadot-SDK-e6007a" alt="Polkadot SDK"></a>
+</p>
 
-> This is a template for creating a [parachain](https://wiki.polkadot.network/docs/learn-parachains) based on Polkadot SDK.
->
-> This template is automatically updated after releases in the main [Polkadot SDK monorepo](https://github.com/paritytech/polkadot-sdk).
+PolkadotGovChain is a custom **Substrate-based parachain** built using the [Polkadot SDK](https://github.com/paritytech/polkadot-sdk). It provides a production-ready governance environment featuring on-chain democracy, council governance, asset management, and cross-chain messaging (XCM) compatibility.
 
-</div>
+This project serves as:
+- 🎓 A **learning reference** for building governance-enabled parachains
+- 🏆 A **hackathon-ready** Polkadot parachain template
+- 🏛️ A **foundation** for DAO and community-chain experiments
+- 🧪 A **Web3 governance research** platform
 
-## Table of Contents
+---
 
-- [Intro](#intro)
+## ✨ Features
 
-- [Template Structure](#template-structure)
+| Feature | Pallet | Status |
+|---------|--------|--------|
+| **Native Token Management** | `pallet_balances` | ✅ |
+| **Custom Asset Issuance** | `pallet_assets` | ✅ |
+| **Council Governance** | `pallet_collective` | ✅ |
+| **Public Democracy** | `pallet_democracy` | ✅ |
+| **Scheduled Executions** | `pallet_scheduler` | ✅ |
+| **Proposal Storage** | `pallet_preimage` | ✅ |
+| **Admin Control** | `pallet_sudo` | ✅ |
+| **Cross-Chain Messaging** | `pallet_xcm` + `parachain_system` | ✅ |
+| **Parachain Collator** | Built-in | ✅ |
 
-- [Getting Started](#getting-started)
+### Core Capabilities
+- ✅ **On-chain Democracy** — Public proposals and referendum voting
+- ✅ **Council Governance** — Elected council for fast-track proposal execution
+- ✅ **Asset Management** — Create and manage custom fungible tokens
+- ✅ **Scheduled Calls** — Time-delayed transaction execution
+- ✅ **XCM Ready** — Cross-chain messaging support for Polkadot ecosystem
+- ✅ **Collator Node** — Produces blocks connected to relay chain
 
-- [Starting a Development Chain](#starting-a-development-chain)
+---
 
-  - [Omni Node](#omni-node-prerequisites)
-  - [Zombienet setup with Omni Node](#zombienet-setup-with-omni-node)
-  - [Parachain Template Node](#parachain-template-node)
-  - [Connect with the Polkadot-JS Apps Front-End](#connect-with-the-polkadot-js-apps-front-end)
-  - [Takeaways](#takeaways)
+## 🏗️ Architecture
 
-- [Runtime development](#runtime-development)
-- [Contributing](#contributing)
-- [Getting Help](#getting-help)
-
-## Intro
-
-- ⏫ This template provides a starting point to build a [parachain](https://wiki.polkadot.network/docs/learn-parachains).
-
-- ☁️ It is based on the
-  [Cumulus](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/cumulus/index.html) framework.
-
-- 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
-  such as a [Balances pallet](https://paritytech.github.io/polkadot-sdk/master/pallet_balances/index.html).
-
-- 👉 Learn more about parachains [here](https://wiki.polkadot.network/docs/learn-parachains)
-
-## Template Structure
-
-A Polkadot SDK based project such as this one consists of:
-
-- 🧮 the [Runtime](./runtime/README.md) - the core logic of the parachain.
-- 🎨 the [Pallets](./pallets/README.md) - from which the runtime is constructed.
-- 💿 a [Node](./node/README.md) - the binary application, not part of the project default-members list and not compiled unless
-  building the project with `--workspace` flag, which builds all workspace members, and is an alternative to
-  [Omni Node](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html).
-
-## Getting Started
-
-- 🦀 The template is using the Rust language.
-
-- 👉 Check the
-  [Rust installation instructions](https://www.rust-lang.org/tools/install) for your system.
-
-- 🛠️ Depending on your operating system and Rust version, there might be additional
-  packages required to compile this template - please take note of the Rust compiler output.
-
-Fetch parachain template code:
-
-```sh
-git clone https://github.com/paritytech/polkadot-sdk-parachain-template.git parachain-template
-
-cd parachain-template
+```
+Polkadot Relay Chain (Rococo / Local Testnet)
+        │
+        ├── Validator: Alice
+        ├── Validator: Bob
+        │
+        └─── PolkadotGovChain Parachain (ParaId: 1000)
+              │
+              ├── Governance Layer
+              │   ├── pallet_democracy (Public Proposals)
+              │   ├── pallet_collective (Council)
+              │   └── pallet_scheduler (Delayed Execution)
+              │
+              ├── Economic Layer
+              │   ├── pallet_balances (Native Token)
+              │   └── pallet_assets (Custom Tokens)
+              │
+              └── Communication Layer
+                  ├── pallet_xcm (Cross-chain Messages)
+                  └── pallet_xcmp_queue (Message Queue)
 ```
 
-## Starting a Development Chain
+---
 
-The parachain template relies on a hardcoded parachain id which is defined in the runtime code
-and referenced throughout the contents of this file as `{{PARACHAIN_ID}}`. Please replace
-any command or file referencing this placeholder with the value of the `PARACHAIN_ID` constant:
+## 🚀 Quick Start
 
-```rust,ignore
-pub const PARACHAIN_ID: u32 = 1000;
-```
+### Prerequisites
+- Rust toolchain (1.84+)
+- Cargo
+- Git
+- Zombienet (for local testing)
 
-### Omni Node Prerequisites
-
-[Omni Node](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html) can
-be used to run the parachain template's runtime. `polkadot-omni-node` binary crate usage is described at a high-level
-[on crates.io](https://crates.io/crates/polkadot-omni-node).
-
-#### Install `polkadot-omni-node`
-
-```sh
-cargo install polkadot-omni-node
-```
-
-> For more advanced options, please see the installation section at [`crates.io/omni-node`](https://crates.io/crates/polkadot-omni-node).
-
-#### Build `parachain-template-runtime`
-
-```sh
-cargo build --profile production
-```
-
-#### Install `staging-chain-spec-builder`
-
-```sh
-cargo install staging-chain-spec-builder
-```
-
-> For more advanced options, please see the installation section at [`crates.io/staging-chain-spec-builder`](https://crates.io/crates/staging-chain-spec-builder).
-
-#### Use `chain-spec-builder` to generate the `chain_spec.json` file
-
-```sh
-chain-spec-builder create --relay-chain "rococo-local" --runtime \
-    target/release/wbuild/parachain-template-runtime/parachain_template_runtime.wasm named-preset development
-```
-
-**Note**: the `relay-chain` flag is required by Omni Node. The `relay-chain` value is set in accordance
-with the relay chain ID where this instantiation of parachain-template will connect to.
-
-#### Run Omni Node
-
-Start Omni Node with the generated chain spec. We'll start it in development mode (without a relay chain config), producing
-and finalizing blocks based on manual seal, configured below to seal a block with each second.
+### 1. Clone & Build
 
 ```bash
-polkadot-omni-node --chain <path/to/chain_spec.json> --dev --dev-block-time 1000
+# Clone the repository
+git clone https://github.com/codewithdubeyji/PolkadotGovChain.git
+cd PolkadotGovChain
+
+# Build the parachain node
+cargo build --release
 ```
 
-However, such a setup is not close to what would run in production, and for that we need to setup a local
-relay chain network that will help with the block finalization. In this guide we'll setup a local relay chain
-as well. We'll not do it manually, by starting one node at a time, but we'll use [zombienet](https://paritytech.github.io/zombienet/intro.html).
+**Build time:** ~7-10 minutes  
+**Binary location:** `./target/release/parachain-template-node`
 
-Follow through the next section for more details on how to do it.
+### 2. Generate Genesis Files
 
-### Zombienet setup with Omni Node
+```bash
+# Export WASM runtime
+./target/release/parachain-template-node export-genesis-wasm --chain local > para-2000-wasm
 
-Assuming we continue from the last step of the previous section, we have a chain spec and we need to setup a relay chain.
-We can install `zombienet` as described [here](https://paritytech.github.io/zombienet/install.html#installation), and
-`zombienet-omni-node.toml` contains the network specification we want to start.
-
-#### Relay chain prerequisites
-
-Download the `polkadot` (and the accompanying `polkadot-prepare-worker` and `polkadot-execute-worker`) binaries from
-[Polkadot SDK releases](https://github.com/paritytech/polkadot-sdk/releases). Then expose them on `PATH` like so:
-
-```sh
-export PATH="$PATH:<path/to/binaries>"
+# Export genesis state
+./target/release/parachain-template-node export-genesis-state --chain local > para-2000-genesis
 ```
 
-#### Update `zombienet-omni-node.toml` with a valid chain spec path
+### 3. Run Local Network with Zombienet
 
-To simplify the process of using the parachain-template with zombienet and Omni Node, we've added a pre-configured
-development chain spec (dev_chain_spec.json) to the parachain template. The zombienet-omni-node.toml file of this
-template points to it, but you can update it to an updated chain spec generated on your machine. To generate a
-chain spec refer to [staging-chain-spec-builder](https://crates.io/crates/staging-chain-spec-builder)
+```bash
+# Install Zombienet (if not already installed)
+curl -LO https://github.com/paritytech/zombienet/releases/download/v1.3.116/zombienet-linux-x64
+chmod +x zombienet-linux-x64
+sudo mv zombienet-linux-x64 /usr/local/bin/zombienet
 
-Then make the changes in the network specification like so:
+# Build Polkadot relay chain binary (if not already built)
+cd /path/to/polkadot-sdk
+cargo build --release -p polkadot
 
-```toml
-# ...
-[[parachains]]
-id = "<PARACHAIN_ID>"
-chain_spec_path = "<TO BE UPDATED WITH A VALID PATH>"
-# ...
+# Spawn the network
+cd templates/parachain
+zombienet -p native spawn zombienet.toml
 ```
 
-#### Start the network
+---
 
-```sh
-zombienet --provider native spawn zombienet-omni-node.toml
-```
+## 🌐 Connect to UI
 
-### Parachain Template Node
+| Network | RPC Port | Polkadot.js Apps URL |
+|---------|----------|----------------------|
+| **Relay Chain** (Rococo Local) | 9944 | [Connect to Relay](https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:9944) |
+| **Parachain** (PolkadotGovChain) | 9988 | [Connect to Parachain](https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:9988) |
 
-As mentioned in the `Template Structure` section, the `node` crate is optionally compiled and it is an alternative
-to `Omni Node`. Similarly, it requires setting up a relay chain, and we'll use `zombienet` once more.
+### Network Topology
+- **Alice** — Relay chain validator (Port: 9944)
+- **Bob** — Relay chain validator (Port: 9955)
+- **Charlie** — Parachain collator (Port: 9988)
 
-#### Install the `parachain-template-node`
+---
 
-```sh
-cargo install --path node --locked
-```
+## 🧩 Runtime Pallets
 
-#### Setup and start the network
+### Governance Stack
+| Pallet | Description | Key Functions |
+|--------|-------------|---------------|
+| `pallet_democracy` | Public proposals & referendums | `propose()`, `vote()`, `second()` |
+| `pallet_collective` | Council governance (fast-track) | `propose()`, `vote()`, `execute()` |
+| `pallet_scheduler` | Scheduled on-chain calls | `schedule()`, `cancel()` |
+| `pallet_preimage` | Store proposal preimages | `notePreimage()` |
 
-For setup, please consider the instructions for `zombienet` installation [here](https://paritytech.github.io/zombienet/install.html#installation)
-and [relay chain prerequisites](#relay-chain-prerequisites).
+### Economic Stack
+| Pallet | Description | Key Functions |
+|--------|-------------|---------------|
+| `pallet_balances` | Native token (UNIT) | `transfer()`, `transfer_keep_alive()` |
+| `pallet_assets` | Custom fungible tokens | `create()`, `mint()`, `transfer()` |
 
-We're left just with starting the network:
+### Infrastructure Stack
+| Pallet | Description | Key Functions |
+|--------|-------------|---------------|
+| `pallet_sudo` | Superuser control | `sudo()`, `set_key()` |
+| `pallet_xcm` | Cross-chain messaging | `send()`, `execute()` |
+| `pallet_xcmp_queue` | XCM message queue | Auto-managed |
+| `pallet_parachain_system` | Parachain interface | Auto-managed |
 
-```sh
-zombienet --provider native spawn zombienet.toml
-```
+---
 
-### Connect with the Polkadot-JS Apps Front-End
+## 🎯 Use Cases
 
-- 🌐 You can interact with your local node using the
-  hosted version of the Polkadot/Substrate Portal:
-  [relay chain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944)
-  and [parachain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9988).
+### 1. **DAO Governance Chains**
+Build decentralized autonomous organizations with on-chain voting and proposal execution.
 
-- 🪐 A hosted version is also
-  available on [IPFS](https://dotapps.io/).
+### 2. **Community Token Platforms**
+Issue and manage community tokens with built-in governance mechanisms.
 
-- 🧑‍🔧 You can also find the source code and instructions for hosting your own instance in the
-  [`polkadot-js/apps`](https://github.com/polkadot-js/apps) repository.
+### 3. **Cross-Chain Governance**
+Experiment with multi-chain governance using XCM messaging.
 
-### Takeaways
+### 4. **Voting Systems**
+Implement referendum-based voting for decentralized decision-making.
 
-Development parachains:
+### 5. **Web3 Learning & Research**
+Study Polkadot parachain architecture and Substrate runtime development.
 
-- 🔗 Connect to relay chains, and we showcased how to connect to a local one.
-- 🧹 Do not persist the state.
-- 💰 Are preconfigured with a genesis state that includes several prefunded development accounts.
-- 🧑‍⚖️ Development accounts are used as validators, collators, and `sudo` accounts.
+---
 
-## Runtime development
+## 📚 Testing Guide
 
-We recommend using [`chopsticks`](https://github.com/AcalaNetwork/chopsticks) when the focus is more on the runtime
-development and `OmniNode` is enough as is.
+### Test 1: Create & Mint Assets
 
-### Install chopsticks
+1. Connect to parachain at `ws://127.0.0.1:9988`
+2. Go to **Developer → Extrinsics**
+3. Select **ALICE** account
+4. Extrinsic: `assets → create`
+   - `id`: `1`
+   - `admin`: ALICE
+   - `minBalance`: `1`
+5. Submit transaction
+6. Mint tokens: `assets → mint`
+   - `id`: `1`
+   - `beneficiary`: ALICE
+   - `amount`: `1000000`
 
-To use `chopsticks`, please install the latest version according to the installation [guide](https://github.com/AcalaNetwork/chopsticks?tab=readme-ov-file#install).
+### Test 2: Council Proposal
 
-### Build a raw chain spec
+1. **Developer → Extrinsics** → ALICE
+2. Extrinsic: `council → propose`
+   - `threshold`: `1`
+   - `proposal`: `system.remark("Test proposal")`
+   - `lengthBound`: `100`
+3. Go to **Governance → Council → Motions**
+4. Vote: `council → vote`
 
-Build the `parachain-template-runtime` as mentioned before in this guide and use `chain-spec-builder`
-again but this time by passing `--raw-storage` flag:
+### Test 3: Democracy Referendum
 
-```sh
-chain-spec-builder create --raw-storage --relay-chain "rococo-local" --runtime \
-    target/release/wbuild/parachain-template-runtime/parachain_template_runtime.wasm named-preset development
-```
+1. **Developer → Extrinsics** → ALICE
+2. Create preimage: `preimage → notePreimage`
+   - `encodedProposal`: `system.remark("Democracy test")`
+3. Submit proposal: `democracy → propose`
+   - `proposal`: (preimage hash)
+   - `value`: `100000000000`
+4. Check **Governance → Democracy**
 
-### Start `chopsticks` with the chain spec
+---
 
-```sh
-npx @acala-network/chopsticks@latest --chain-spec <path/to/chain_spec.json>
-```
+## 🛠️ Development Status
 
-### Alternatives
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Relay chain connection | ✅ Complete | Tested with Rococo Local |
+| Parachain collator | ✅ Complete | Charlie node operational |
+| Governance pallets | ✅ Integrated | Council + Democracy working |
+| Assets pallet | ✅ Integrated | Token creation tested |
+| XCM base wiring | ✅ Ready | Message passing enabled |
+| Genesis configuration | ✅ Complete | Alice in council |
+| Zombienet setup | ✅ Complete | Auto-spawns network |
+| HRMP channels | ⚠️ Future work | Optional for production |
 
-`OmniNode` can be still used for runtime development if using the `--dev` flag, while `parachain-template-node` doesn't
-support it at this moment. It can still be used to test a runtime in a full setup where it is started alongside a
-relay chain network (see [Parachain Template node](#parachain-template-node) setup).
+---
 
-## Contributing
+## 📖 Resources & Credits
 
-- 🔄 This template is automatically updated after releases in the main [Polkadot SDK monorepo](https://github.com/paritytech/polkadot-sdk).
+This project is built using open-source software from the Polkadot and Substrate ecosystem:
 
-- ➡️ Any pull requests should be directed to this [source](https://github.com/paritytech/polkadot-sdk/tree/master/templates/parachain).
+### Acknowledgements
+- **[Polkadot SDK](https://github.com/paritytech/polkadot-sdk)** — Substrate framework and Polkadot runtime
+- **[Substrate](https://github.com/paritytech/substrate)** — Blockchain framework (now part of Polkadot SDK)
+- **[Zombienet](https://github.com/paritytech/zombienet)** — Local network testing tool
+- **[Polkadot-JS Apps](https://github.com/polkadot-js/apps)** — Universal Substrate UI
+- **[Parity Technologies](https://www.parity.io/)** — Core developers of Polkadot & Substrate
+- **Polkadot Community** — Documentation, tutorials, and ecosystem support
+- **Substrate Builders Program** — Technical guidance and resources
 
-- 😇 Please refer to the monorepo's
-  [contribution guidelines](https://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/CONTRIBUTING.md) and
-  [Code of Conduct](https://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/CODE_OF_CONDUCT.md).
+### Documentation References
+- [Polkadot Wiki](https://wiki.polkadot.network/)
+- [Substrate Documentation](https://docs.substrate.io/)
+- [Polkadot SDK Docs](https://paritytech.github.io/polkadot-sdk/)
+- [Cumulus Documentation](https://github.com/paritytech/cumulus)
 
-## Getting Help
+**All credits go to the Polkadot and Substrate open-source community.**
 
-- 🧑‍🏫 To learn about Polkadot in general, [docs.Polkadot.com](https://docs.polkadot.com/) website is a good starting point.
+---
 
-- 🧑‍🔧 For technical introduction, [here](https://github.com/paritytech/polkadot-sdk#-documentation) are
-  the Polkadot SDK documentation resources.
+**PolkadotGovChain Contributors**
 
-- 👥 Additionally, there are [GitHub issues](https://github.com/paritytech/polkadot-sdk/issues) and
-  [Substrate StackExchange](https://substrate.stackexchange.com/).
-- 👥You can also reach out on the [Official Polkadot discord server](https://polkadot-discord.w3f.tools/)
-- 🧑Reach out on [Telegram](https://t.me/substratedevs) for more questions and discussions
+Built as a governance-enabled parachain project using Polkadot SDK.
+
+For questions, issues, or contributions:
+- Open an issue on GitHub
+- Submit a pull request
+- Join the [Polkadot Discord](https://dot.li/discord)
+
+---
+
+## 🔗 Project Links
+
+- **GitHub Repository:** [[https://github.com/codewithdubeyji/PolkadotGovChain.git](https://github.com/codewithdubeyji/PolkadotGovChain.git)]
+- **Polkadot.js Connect:** [ws://127.0.0.1:9988](https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:9988)
